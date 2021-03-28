@@ -6,6 +6,7 @@
 #define         SENSOR_IN_PIN           6
 #define         SENSOR_OUT_PIN          7
 
+#define         WAKEUP_DELAY            250
 #define         TIME_DELAY              2000
 #define         BAUDRATE_DEFAULT        115200
 
