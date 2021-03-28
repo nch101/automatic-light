@@ -15,29 +15,25 @@ typedef enum {
 } exec_state_t;
 
 typedef enum {
-  SLEEP_MODE,
-  WORKING_MODE,
-  UPDATE_MODE
-} system_state_t;
-
-typedef enum {
   LIGHT_ON,
   LIGHT_OFF
 } light_state_t;
 
 typedef enum {
-  NONE,
-  MAYBE_HAS,
-  HAS,
-  MAYBE_NOT
-} person_detect_state_t;
+  NOT_DETECTED,
+  DETECTED
+} motion_sensor_state_t;
 
 typedef enum {
   IN,
   MAYBE_IN,
   OUT,
-  MAYBE_OUT,
-  UNKNOWN
-} motion_direct_t;
+  MAYBE_OUT
+} direction_t;
+
+typedef struct {
+  motion_sensor_state_t sensor_in;
+  motion_sensor_state_t sensor_out;
+} motion_sensors_t;
 
 #endif // CONFIG_H

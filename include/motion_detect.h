@@ -4,30 +4,18 @@
 #include <Arduino.h>
 #include "config.h"
 
-#define         SENSOR_IN_PIN           6
-#define         SENSOR_OUT_PIN          7
+#define           SENSOR_IN_PIN           6
+#define           SENSOR_OUT_PIN          7
 
-#define         pinToISR(x)             digitalPinToInterrupt(x)
+#define           pinToISR(x)             digitalPinToInterrupt(x)
 
-extern motion_direct_t      personState;
+void Init_MotionSensors();
 
-typedef enum {
-  NOT_MOVING,
-  MOVING
-} motion_sensor_state_t;
+void SensorInRising();
+void SensorOutRising();
+void SensorInFalling();
+void SensorOutFalling();
 
-typedef struct {
-  motion_sensor_state_t sensor_in;
-  motion_sensor_state_t sensor_out;
-} sensor_t;
-
-void initMotionSensors();
-
-void sensor_in_rising();
-void sensor_out_rising();
-void sensor_in_falling();
-void sensor_out_falling();
-
-motion_direct_t motionDirectDetect();
+motion_sensors_t* Check_MotionSensors();
 
 #endif // MOTION_DETECT_H

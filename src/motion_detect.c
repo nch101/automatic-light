@@ -1,46 +1,70 @@
 #include "motion_detect.h"
 
-static sensor_t motion_sensor;
+static motion_sensors_t MotionSensors;
 
-void sensor_in_rising() {
-  motion_sensor.sensor_in = MOVING;
+/*****************************************************************************
+ * ProgramName: SensorInRising
+ * Description: Interrupt callback function when sensor in is rising
+ * Parameters:  None
+ * Return:      None
+ ****************************************************************************/
+void SensorInRising() {
+  MotionSensors.sensor_in = DETECTED;
 };
 
-void sensor_out_rising() {
-  motion_sensor.sensor_out = MOVING;
+/*****************************************************************************
+ * ProgramName: SensorOutRising
+ * Description: Interrupt callback function when sensor out is rising
+ * Parameters:  None
+ * Return:      None
+ ****************************************************************************/
+void SensorOutRising() {
+  MotionSensors.sensor_out = DETECTED;
 }
 
-void sensor_in_falling() {
-  motion_sensor.sensor_in = NOT_MOVING;
+/*****************************************************************************
+ * ProgramName: SensorInFalling
+ * Description: Interrupt callback function when sensor in is falling
+ * Parameters:  None
+ * Return:      None
+ ****************************************************************************/
+void SensorInFalling() {
+  MotionSensors.sensor_in = NOT_DETECTED;
 }
 
-void sensor_out_falling() {
-  motion_sensor.sensor_out = NOT_MOVING;
+/*****************************************************************************
+ * ProgramName: SensorOutFalling
+ * Description: Interrupt callback function when sensor out is falling
+ * Parameters:  None
+ * Return:      None
+ ****************************************************************************/
+void SensorOutFalling() {
+  MotionSensors.sensor_out = NOT_DETECTED;
 }
 
-void initMotionSensors() {
+/*****************************************************************************
+ * ProgramName: Init_MotionSensors
+ * Description: Initial pinMode and attachInterrupt sensors pin
+ * Parameters:  None
+ * Return:      None
+ ****************************************************************************/
+void Init_MotionSensors() {
   pinMode(SENSOR_IN_PIN, INPUT_PULLUP);
   pinMode(SENSOR_OUT_PIN, INPUT_PULLUP);
 
-  attachInterrupt(pinToISR(SENSOR_IN_PIN), sensor_in_rising, RISING);
-  attachInterrupt(pinToISR(SENSOR_IN_PIN), sensor_in_falling, FALLING);
+  attachInterrupt(pinToISR(SENSOR_IN_PIN), SensorInRising, RISING);
+  attachInterrupt(pinToISR(SENSOR_IN_PIN), SensorInFalling, FALLING);
 
-  attachInterrupt(pinToISR(SENSOR_OUT_PIN), sensor_out_rising, RISING);
-  attachInterrupt(pinToISR(SENSOR_OUT_PIN), sensor_out_falling, FALLING);
+  attachInterrupt(pinToISR(SENSOR_OUT_PIN), SensorOutRising, RISING);
+  attachInterrupt(pinToISR(SENSOR_OUT_PIN), SensorOutFalling, FALLING);
 }
 
-motion_direct_t motionDirectDetect() {
-  if (motion_sensor.sensor_in == MOVING && motion_sensor.sensor_out == NOT_MOVING) {
-    return MAYBE_IN;
-  } else if (motion_sensor.sensor_in == MOVING && motion_sensor.sensor_out == MOVING) {
-    if (personState == MAYBE_IN) {
-      return IN;
-    } else if (personState == MAYBE_OUT) {
-      return OUT;
-    };
-  } else if (motion_sensor.sensor_in == NOT_MOVING && motion_sensor.sensor_out == MOVING) {
-    return MAYBE_OUT;
-  };
-  
-  return UNKNOWN;
-};
+/*****************************************************************************
+ * ProgramName: Chech_MotionSensors
+ * Description: Get motion sensors data struct
+ * Parameters:  None
+ * Return:      motion_sensors_t*
+ ****************************************************************************/
+motion_sensors_t* Check_MotionSensors() {
+  return &MotionSensors;
+}
