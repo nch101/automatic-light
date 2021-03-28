@@ -3,6 +3,8 @@
 
 #define         LIGHT_PIN               4
 #define         FAN_PIN                 5
+#define         SENSOR_IN_PIN           6
+#define         SENSOR_OUT_PIN          7
 
 #define         TIME_DELAY              2000
 #define         BAUDRATE_DEFAULT        115200

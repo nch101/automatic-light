@@ -4,9 +4,6 @@
 #include <Arduino.h>
 #include "config.h"
 
-#define           SENSOR_IN_PIN           6
-#define           SENSOR_OUT_PIN          7
-
 #define           pinToISR(x)             digitalPinToInterrupt(x)
 
 void Init_MotionSensors();
