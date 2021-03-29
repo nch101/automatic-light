@@ -1,8 +1,11 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#define         pinToISR(x)             digitalPinToInterrupt(x)
+
 #define         LIGHT_PIN               4
 #define         FAN_PIN                 5
+#define         FAN_CONTROL_PIN         8
 #define         SENSOR_IN_PIN           6
 #define         SENSOR_OUT_PIN          7
 
@@ -18,9 +21,14 @@ typedef enum {
 } exec_state_t;
 
 typedef enum {
-  LIGHT_ON,
-  LIGHT_OFF
+  LIGHT_OFF,
+  LIGHT_ON
 } light_state_t;
+
+typedef enum {
+  FAN_OFF,
+  FAN_ON
+} fan_state_t;
 
 typedef enum {
   NOT_DETECTED,
