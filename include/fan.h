@@ -9,6 +9,6 @@ void Init_Fan();
 void TurnOn_Fan();
 void TurnOff_Fan();
 
-fan_state_t* Check_FanState();
+state_t* Check_FanState();
 
 #endif // FAN_H

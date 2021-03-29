@@ -21,14 +21,9 @@ typedef enum {
 } exec_state_t;
 
 typedef enum {
-  LIGHT_OFF,
-  LIGHT_ON
-} light_state_t;
-
-typedef enum {
-  FAN_OFF,
-  FAN_ON
-} fan_state_t;
+  OFF,
+  ON
+} state_t;
 
 typedef enum {
   NOT_DETECTED,

@@ -64,9 +64,9 @@ static void DetectedMotionStateUpdate() {
  * Return:      None
  ****************************************************************************/
 static void LightStateUpdate() {
-  if (NumsOfPeople > 0 && *Check_LightState() == LIGHT_OFF) {
+  if (NumsOfPeople > 0 && *Check_LightState() == OFF) {
     TurnOn_Light();
-  } else if (NumsOfPeople == 0 && *Check_LightState() == LIGHT_ON) {
+  } else if (NumsOfPeople == 0 && *Check_LightState() == ON) {
     TurnOff_Light();
   };
 };
@@ -79,7 +79,7 @@ static void LightStateUpdate() {
  ****************************************************************************/
 static void sleeping() {
   if (NumsOfPeople == 0 \
-  && *Check_LightState() == LIGHT_OFF \
+  && *Check_LightState() == OFF \
   && DetectedMotionState == OUT) {
     set_sleep_mode(SLEEP_MODE_PWR_DOWN);
     sleep_mode();
