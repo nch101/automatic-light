@@ -1,4 +1,5 @@
 #include <avr/sleep.h>
+#include <avr/power.h>
 #include <Arduino.h>
 
 extern "C" {
@@ -144,6 +145,12 @@ static void SystemStateUpdate() {
 };
 
 void setup() {
+  power_adc_disable();
+  power_spi_disable();
+  power_twi_disable();
+  power_timer1_disable();
+  power_timer2_disable();
+
   NumsOfPeople                      = 0;
   DetectedMotionState               = NONE;
   SystemState                       = SLEEPING;
