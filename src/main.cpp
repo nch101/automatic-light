@@ -5,6 +5,7 @@ extern "C" {
   #include "config.h"
   #include "motion_detect.h"
   #include "light.h"
+  #include "fan.h"
 }
 
 system_state_t              SystemState;
@@ -19,10 +20,15 @@ static uint32_t             preMillis;
  * Return:      None
  ****************************************************************************/
 static void sleeping() {
+  #ifdef DEBUG
+  Serial.println("Begin sleeping");
+  #endif //DEBUG
   delay(WAKEUP_DELAY);
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   sleep_mode();
-  delay(WAKEUP_DELAY);
+  #ifdef DEBUG
+  Serial.println("Wakeup");
+  #endif //DEBUG
 };
 
 /*****************************************************************************
@@ -44,6 +50,7 @@ static void DetectedMotionStateUpdate() {
         preMillis = millis();
       };
       break;
+
     case MAYBE_IN:
       if (millis() - preMillis >= TIME_DELAY) {
         DetectedMotionState = NONE;
@@ -54,11 +61,13 @@ static void DetectedMotionStateUpdate() {
         NumsOfPeople++;
       };
       break;
+
     case IN:
       if (Check_MotionSensors()->sensor_out == NOT_DETECTED) {
         DetectedMotionState = NONE;
       };
       break;
+
     case MAYBE_OUT:
       if (millis() - preMillis >= TIME_DELAY) {
         DetectedMotionState = NONE;
@@ -69,11 +78,13 @@ static void DetectedMotionStateUpdate() {
         NumsOfPeople--;
       };
       break;
+
     case OUT:
       if (Check_MotionSensors()->sensor_in == NOT_DETECTED) {
         DetectedMotionState = NONE;
       };
       break;
+
     default:
       break;
   };
@@ -89,31 +100,44 @@ static void SystemStateUpdate() {
   switch (SystemState) {
   case SLEEPING:
     sleeping();
-    DetectedMotionState = MAYBE_IN;
     SystemState = STANDBY;
+    #ifdef DEBUG
+    Serial.println("STANDBY");
+    #endif //DEBUG
     preMillis = millis();
     break;
-  case STANDBY:
-    if (NumsOfPeople > 0 && *Check_LightState() == OFF) {
-      SystemState = WORKING;
-      TurnOn_Light();
-    }
 
+  case STANDBY:
     if (millis() - preMillis >= TIME_DELAY) {
       SystemState = SLEEPING;
-    }
+      #ifdef DEBUG
+      Serial.println("SLEEPING");
+      #endif //DEBUG
+    };
 
-    if (NumsOfPeople < 0) {
-      NumsOfPeople = 0;
-      SystemState = SLEEPING;
-    }
+    if ((NumsOfPeople > 0 && *Check_LightState() == OFF) || *Check_FanState() == ON) {
+      SystemState = WORKING;
+      #ifdef DEBUG
+      Serial.println("WORKING");
+      #endif //DEBUG
+      TurnOn_Light();
+    };
     break;
+
   case WORKING:
     if (NumsOfPeople == 0) {
-      SystemState = SLEEPING;
       TurnOff_Light();
-    }
+    };
+    if (*Check_FanState() == OFF && *Check_LightState() == OFF) {
+      #ifdef DEBUG
+      Serial.println("SLEEPING");
+      #endif //DEBUG
+      SystemState = SLEEPING;
+    };
+
+    NumsOfPeople = NumsOfPeople < 0 ? 0 : NumsOfPeople;
     break;
+
   default:
     break;
   }
@@ -125,10 +149,11 @@ void setup() {
   SystemState                       = SLEEPING;
   Init_MotionSensors();
   Init_Light();
+  Init_Fan();
 
   #ifdef DEBUG
   Serial.begin(BAUDRATE_DEFAULT);
-  Serial.println("Sleeping...");
+  Serial.println("Running...");
   #endif // DEBUG
 };
 
@@ -137,14 +162,18 @@ void loop() {
   DetectedMotionStateUpdate();
 
   #ifdef DEBUG
-  Serial.println("***********");
+  Serial.println("***************");
   Serial.print(" People: ");
   Serial.println(NumsOfPeople);
-  Serial.print(" State: ");
-  Serial.println(SystemState);
   Serial.print(" Motion: ");
   Serial.println(DetectedMotionState);
-  Serial.println("***********");
+  Serial.print(" SystemState: ");
+  Serial.println(SystemState);
+  Serial.print(" FanState: ");
+  Serial.println(*Check_FanState());
+  Serial.print(" LightState: ");
+  Serial.println(*Check_LightState());
+  Serial.println("***************");
   #endif // DEBUG
 
   delay(150);

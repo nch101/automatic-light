@@ -3,13 +3,13 @@
 static state_t FanState;
 
 /*****************************************************************************
- * ProgramName: FanControlRising
+ * ProgramName: FanControlChange
  * Description: Interrupt callback function when fan button is pressed
  * Parameters:  None
  * Return:      None
  ****************************************************************************/
-void FanControlRising() {
-  delay(100);
+void FanControlChange() {
+  delay(50);
   FanState == OFF ? TurnOn_Fan() : TurnOff_Fan();
 };
 
@@ -23,9 +23,10 @@ void Init_Fan() {
   pinMode(FAN_PIN, OUTPUT);
   pinMode(FAN_CONTROL_PIN, INPUT_PULLUP);
 
-  attachInterrupt(pinToISR(FAN_CONTROL_PIN), FanControlRising, RISING);
+  attachInterrupt(pinToISR(FAN_CONTROL_PIN), FanControlChange, FALLING);
   
   FanState                          = OFF;
+  digitalWrite(FAN_PIN, LOW);
 };
 
 /*****************************************************************************
