@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "sleep.h": "c"
+        "sleep.h": "c",
+        "motion_detect.h": "c"
     }
 }

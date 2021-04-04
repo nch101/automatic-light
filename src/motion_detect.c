@@ -3,43 +3,25 @@
 static motion_sensors_t MotionSensors;
 
 /*****************************************************************************
- * ProgramName: SensorInRising
- * Description: Interrupt callback function when sensor in is rising
+ * ProgramName: SensorInChange
+ * Description: Interrupt callback function when sensor in is changing
  * Parameters:  None
  * Return:      None
  ****************************************************************************/
-void SensorInRising() {
-  MotionSensors.sensor_in = DETECTED;
+void SensorInChange() {
+  delay(50);
+  MotionSensors.sensor_in = digitalRead(SENSOR_IN_PIN) ? NOT_DETECTED : DETECTED;
 };
 
 /*****************************************************************************
- * ProgramName: SensorOutRising
- * Description: Interrupt callback function when sensor out is rising
+ * ProgramName: CheckSensorOut
+ * Description: 
  * Parameters:  None
  * Return:      None
  ****************************************************************************/
-void SensorOutRising() {
-  MotionSensors.sensor_out = DETECTED;
-}
-
-/*****************************************************************************
- * ProgramName: SensorInFalling
- * Description: Interrupt callback function when sensor in is falling
- * Parameters:  None
- * Return:      None
- ****************************************************************************/
-void SensorInFalling() {
-  MotionSensors.sensor_in = NOT_DETECTED;
-}
-
-/*****************************************************************************
- * ProgramName: SensorOutFalling
- * Description: Interrupt callback function when sensor out is falling
- * Parameters:  None
- * Return:      None
- ****************************************************************************/
-void SensorOutFalling() {
-  MotionSensors.sensor_out = NOT_DETECTED;
+static void CheckSensorOut() {
+  delay(50);
+  MotionSensors.sensor_out = digitalRead(SENSOR_OUT_PIN) ? NOT_DETECTED : DETECTED;
 }
 
 /*****************************************************************************
@@ -52,12 +34,8 @@ void Init_MotionSensors() {
   pinMode(SENSOR_IN_PIN, INPUT_PULLUP);
   pinMode(SENSOR_OUT_PIN, INPUT_PULLUP);
 
-  attachInterrupt(pinToISR(SENSOR_IN_PIN), SensorInRising, RISING);
-  attachInterrupt(pinToISR(SENSOR_IN_PIN), SensorInFalling, FALLING);
-
-  attachInterrupt(pinToISR(SENSOR_OUT_PIN), SensorOutRising, RISING);
-  attachInterrupt(pinToISR(SENSOR_OUT_PIN), SensorOutFalling, FALLING);
-}
+  attachInterrupt(pinToISR(SENSOR_IN_PIN), SensorInChange, CHANGE);
+};
 
 /*****************************************************************************
  * ProgramName: Chech_MotionSensors
@@ -66,5 +44,6 @@ void Init_MotionSensors() {
  * Return:      motion_sensors_t*
  ****************************************************************************/
 motion_sensors_t* Check_MotionSensors() {
+  CheckSensorOut();
   return &MotionSensors;
-}
+};

@@ -3,13 +3,15 @@
 
 #define         pinToISR(x)             digitalPinToInterrupt(x)
 
-#define         LIGHT_PIN               4
-#define         FAN_PIN                 5
-#define         FAN_CONTROL_PIN         8
-#define         SENSOR_IN_PIN           6
-#define         SENSOR_OUT_PIN          7
+// #define         DEBUG
 
-#define         WAKEUP_DELAY            250
+#define         LIGHT_PIN               13
+#define         FAN_PIN                 5
+#define         FAN_CONTROL_PIN         2
+#define         SENSOR_IN_PIN           3
+#define         SENSOR_OUT_PIN          4
+
+#define         WAKEUP_DELAY            500
 #define         TIME_DELAY              2000
 #define         BAUDRATE_DEFAULT        115200
 
@@ -31,11 +33,18 @@ typedef enum {
 } motion_sensor_state_t;
 
 typedef enum {
-  IN,
+  NONE,
   MAYBE_IN,
-  OUT,
-  MAYBE_OUT
+  MAYBE_OUT,
+  IN,
+  OUT
 } direction_t;
+
+typedef enum {
+  SLEEPING,
+  STANDBY,
+  WORKING
+} system_state_t;
 
 typedef struct {
   motion_sensor_state_t sensor_in;

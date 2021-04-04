@@ -4,13 +4,9 @@
 #include <Arduino.h>
 #include "config.h"
 
+extern system_state_t       SystemState;
+
 void Init_MotionSensors();
-
-void SensorInRising();
-void SensorOutRising();
-void SensorInFalling();
-void SensorOutFalling();
-
 motion_sensors_t* Check_MotionSensors();
 
 #endif // MOTION_DETECT_H
