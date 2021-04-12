@@ -15,8 +15,6 @@
 #define         TIME_DELAY              3000
 #define         BAUDRATE_DEFAULT        115200
 
-#define         TAP_TO_CONFIG_TIME      5
-
 typedef enum {
   ERROR,
   OK

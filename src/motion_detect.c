@@ -1,6 +1,6 @@
 #include "motion_detect.h"
 
-static motion_sensors_t MotionSensors;
+static volatile motion_sensors_t MotionSensors;
 
 /*****************************************************************************
  * ProgramName: SensorInChange
@@ -43,7 +43,7 @@ void Init_MotionSensors() {
  * Parameters:  None
  * Return:      motion_sensors_t*
  ****************************************************************************/
-motion_sensors_t* Check_MotionSensors() {
+motion_sensors_t* volatile Check_MotionSensors() {
   CheckSensorOut();
   return &MotionSensors;
 };

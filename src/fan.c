@@ -1,6 +1,6 @@
 #include "fan.h"
 
-static state_t FanState;
+static volatile state_t FanState;
 
 /*****************************************************************************
  * ProgramName: FanControlChange
@@ -57,6 +57,6 @@ void TurnOff_Fan() {
  * Parameters:  None
  * Return:      state_t*
  ****************************************************************************/
-state_t* Check_FanState() {
+state_t* volatile Check_FanState() {
   return &FanState;
 };

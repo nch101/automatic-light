@@ -4,8 +4,6 @@
 #include <Arduino.h>
 #include "config.h"
 
-extern system_state_t       SystemState;
-
 void Init_MotionSensors();
 motion_sensors_t* Check_MotionSensors();
 

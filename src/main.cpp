@@ -9,7 +9,7 @@ extern "C" {
   #include "fan.h"
 }
 
-system_state_t              SystemState;
+static system_state_t       SystemState;
 static direction_t          DetectedMotionState;
 static int8_t               NumsOfPeople;
 static uint32_t             preMillis;
